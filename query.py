@@ -51,14 +51,20 @@ def get_time(service_id, date):
     return times
 
 
+def book_appointment(user_id, slot_id):
+    conn, cursor = connect_db()
+    cursor.execute('INSERT INTO appointments (user_id, slot_id) values (?,?)', (user_id,slot_id))
+
+    conn.commit()
+    conn.close()
+
+def update_slot_status(slot_id):
+    conn, cursor = connect_db()
+    cursor.execute('UPDATE slots SET slot_status = "booked" WHERE slot_id = ?', (slot_id,))
 
 
-
-
-
-
-
-
+    conn.commit()
+    conn.close()
 
 
 

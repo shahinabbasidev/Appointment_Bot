@@ -58,12 +58,16 @@ def choose_data(call):
         inline_key.add(btn)
     bot.send_message(call.message.chat.id, 'Choose a time', reply_markup=inline_key)
 
+@bot.callback_query_handler(func= lambda call: call.data.startswith('time_'))
+def confirm(call):
+    slot_id = int(call.data.split('_')[1])
+    user_id = str(call.from_user.id)
 
+    query.book_appointment(user_id, slot_id)
+    query.update_slot_status(slot_id)
 
-
-
-
-
+    bot.send_message(call.message.chat.id, 'Appointment reserved successfully')
+    user_state.pop(call.from_user.id, None)
 
 
 
