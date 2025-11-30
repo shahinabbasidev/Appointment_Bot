@@ -1,55 +1,46 @@
 import sqlite3
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+BOT_DB = os.getenv('BOT_DB')
 
-conn = sqlite3.connect('appointment_service.db')
+conn = sqlite3.connect(BOT_DB)
 cursor = conn.cursor()
 
-#User Table
-cursor.execute(
-    '''
-    CREATE TABLE IF NOT EXISTS users (
-        user_id TEXT PRIMARY KEY,
-        user_name TEXT
-    )
-    '''
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS users (
+    user_id TEXT PRIMARY KEY,
+    username TEXT
 )
+""")
 
-# Service Table
-cursor.execute(
-    '''
-    CREATE TABLE IF NOT EXISTS services (
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS services (
     service_id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
     admin_id TEXT
-    )
-    '''
 )
+""")
 
-# Slot Table
-cursor.execute(
-    '''
-    CREATE TABLE IF NOT EXISTS slots (
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS slots (
     slot_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    service_id INTEGER,
     date TEXT,
     time TEXT,
-    status INTEGER DEFAULT 'available',
-    service_id INTEGER
-    )
-    '''
+    status TEXT DEFAULT 'available'
 )
-#Appointment Table
-cursor.execute(
-    '''
-    CREATE TABLE IF NOT EXISTS appointments (
-    app_id INTEGER PRIMARY KEY AUTOINCREMENT,
+""")
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS appointments (
+    appointment_id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT,
     slot_id INTEGER
-    )
-    '''
 )
-
-
-
+""")
 
 conn.commit()
 conn.close()
